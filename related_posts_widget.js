@@ -88,7 +88,8 @@ function related_results_labels_thumbs(json) {
         var entry = json.feed.entry[i];
         relatedTitles[relatedTitlesNum] = entry.title.$t;
         try {
-            thumburl[relatedTitlesNum] = entry.gform_foot.url
+            //thumburl[relatedTitlesNum] = entry.gform_foot.url
+            thumburl[relatedTitlesNum] = entry.media$thumbnail.url;
         } catch (error) {
             s = entry.content.$t;
             a = s.indexOf("<img");
@@ -134,34 +135,71 @@ function contains_thumbs(a, e) {
     return false
 }
 
-function printRelatedLabels_thumbs() {
-        for (var i = 0; i < relatedUrls.length; i++) {
-            if ((relatedUrls[i] == currentposturl) || (!(relatedTitles[i]))) {
-                relatedUrls.splice(i, 1);
-                relatedTitles.splice(i, 1);
-                thumburl.splice(i, 1);
-                i--
-            }
-        }
-        var r = Math.floor((relatedTitles.length - 1) * Math.random());
-        var i = 0;
-        if (relatedTitles.length > 0) document.write('<h2>' + relatedpoststitle + '</h2>');
-        document.write('<div style="clear: both;"/>');
-        while (i < relatedTitles.length && i < 20 && i < maxresults) {
-            document.write('<a style="text-decoration:none;margin:0 4px 10px 0;float:left;');
-            if (i != 0) document.write('"');
-            else document.write('"');
-            document.write(' href="' + relatedUrls[r] + '"><img class="related_img" src="' + thumburl[r] + '"/><br/><div id="related-title">' + relatedTitles[r] + '</div></a>');
-            if (r < relatedTitles.length - 1) {
-                r++
-            } else {
-                r = 0
-            }
-            i++
-        }
-        document.write('</div>');
-        relatedUrls.splice(0, relatedUrls.length);
-        thumburl.splice(0, thumburl.length);
-        relatedTitles.splice(0, relatedTitles.length)
-    }
-    //]]>
+/*function printRelatedLabels_thumbs() {
+	for (var i = 0; i < relatedUrls.length; i++) {
+		if ((relatedUrls[i] == currentposturl) || (!(relatedTitles[i]))) {
+			relatedUrls.splice(i, 1);
+			relatedTitles.splice(i, 1);
+			thumburl.splice(i, 1);
+			i--
+		}
+	}
+	var r = Math.floor((relatedTitles.length - 1) * Math.random());
+	var i = 0;
+	if (relatedTitles.length > 0) document.write('<h2>' + relatedpoststitle + '</h2>');
+	document.write('<div style="clear: both;"/>');
+	while (i < relatedTitles.length && i < 20 && i < maxresults) {
+		document.write('<a style="text-decoration:none;margin:0 4px 10px 0;float:left;');
+		if (i != 0) document.write('"');
+		else document.write('"');
+		document.write(' href="' + relatedUrls[r] + '"><img class="related_img" src="' + thumburl[r] + '"/><br/><div id="related-title">' + relatedTitles[r] + '</div></a>');
+		if (r < relatedTitles.length - 1) {
+			r++
+		} else {
+			r = 0
+		}
+		i++
+	}
+	document.write('</div>');
+	relatedUrls.splice(0, relatedUrls.length);
+	thumburl.splice(0, thumburl.length);
+	relatedTitles.splice(0, relatedTitles.length)
+}*/
+
+function printRelatedPosts() {
+	for (var i = 0; i < relatedUrls.length; i++) {
+		if ((relatedUrls[i] == currentposturl) || (!(relatedTitles[i]))) {
+			relatedUrls.splice(i, 1);
+			relatedTitles.splice(i, 1);
+			thumburl.splice(i, 1);
+			i--
+		}
+	}
+	var r = Math.floor((relatedTitles.length - 1) * Math.random());
+	var i = 0;
+	document.write('<div class="row">');
+	while (i < relatedTitles.length && i < 20 && i < maxresults) {
+		if(i < 2){
+			document.write('<div class="col-sm-6 item-grid"><div class="media"><div class="media-left">');
+			document.write('<a href="' + relatedUrls[r] + '"><img class="related_img media-object" src="' + thumburl[r] + '"/></a>');
+			document.write('</div><div class="media-body"><h3 class="related-title">');
+			document.write('<a href="' + relatedUrls[r] + '">' + relatedTitles[r] + '</a></h3></div></div></div>');
+		}
+		else{
+			document.write('<div class="col-sm-6 item-grid"><h3 class="related-title no_thumb"><a href="' + relatedUrls[r] + '">' + relatedTitles[r] + '</a></h3></div>');
+		}
+		
+		if (r < relatedTitles.length - 1) {
+			r++
+		} else {
+			r = 0
+		}
+		i++
+	}
+	document.write('</div>');
+	relatedUrls.splice(0, relatedUrls.length);
+	thumburl.splice(0, thumburl.length);
+	relatedTitles.splice(0, relatedTitles.length)
+}
+
+//]]>
